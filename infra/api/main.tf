@@ -26,6 +26,11 @@ resource "aws_apigatewayv2_stage" "prod" {
   name        = "iata_api_prod"
   auto_deploy = true
 
+  default_route_settings {
+    throttling_burst_limit = 100
+    throttling_rate_limit  = 100
+  }
+
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gw.arn
 
@@ -60,7 +65,16 @@ resource "aws_apigatewayv2_route" "default" {
   target    = "integrations/${aws_apigatewayv2_integration.iata.id}"
 }
 
+# Lazy / root route. Change to static bucket target?
 resource "aws_apigatewayv2_route" "iata" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  route_key = "GET /{code}"
+  target    = "integrations/${aws_apigatewayv2_integration.iata.id}"
+}
+
+# Add explicit /iata route (future?)
+resource "aws_apigatewayv2_route" "iata_explicit" {
   api_id = aws_apigatewayv2_api.lambda.id
 
   route_key = "GET /iata/{code}"

@@ -25,12 +25,11 @@ def handle(event, context):
             payload = {f"ERROR": "Unable to find IATA code '{code}'"}
     else:
         payload = {"ERROR": "IATA code request not found in path"}
-    payload = table.get_item(Key={"IATA": "ORD"})
     message = {
         "statusCode": 500 if "ERROR" in payload else 200,
         "isBase64Encoded": False,
         "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(payload["Item"]),
+        "body": json.dumps(payload),
     }
 
     return message
