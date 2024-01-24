@@ -1,5 +1,7 @@
 # IATA API
 
+https://colinbruner.com/posts/cloud/aws/skyport-codes/
+
 ## src
 The src code for Lambda used to fetch IATA information from the dynamoDB.
 
